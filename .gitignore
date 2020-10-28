@@ -1,0 +1,21 @@
+# npm
+node_modules/**
+
+# Tests
+.nyc_output/**
+coverage/**
+
+# IDE
+.vscode/**
+
+# OSX
+**/.DS_Store
+
+# fabric-network
+**/WALLETS/**
+
+#artifacts
+dist/**
+
+# Certificate Manager credentials
+**/cert-manager-credentials.json

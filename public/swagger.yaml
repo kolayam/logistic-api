@@ -1,0 +1,266 @@
+openapi: '3.0.0'
+
+info:
+  version: "1.0.0"
+  title: REST API app
+  
+servers: 
+  - url: http://localhost:3000
+  
+paths:
+  /health:
+    get:
+      operationId: health
+      tags:
+        - health
+      description: Get health status of app 
+      responses:
+        200:
+          description: Health check response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example: 
+                application/json: { "success": true, "message": "Server is up!", "status": "UP" }
+
+  /ping:
+    get:
+      operationId: ping
+      tags:
+        - ping
+      description: Ping blockchain network
+      responses:
+        200:
+          description: Ping response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBody'
+  
+  '/myAsset/{assetId}':
+    get:
+      operationId: getMyAsset
+      tags:
+        - getMyAsset
+      description: Get asset from blockchain
+      parameters:
+        - name: assetId
+          in: path
+          schema:
+            type: string
+          description: Asset ID
+          required: true
+      responses:
+        200:
+          description: Asset response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+    post:
+      operationId: createMyAsset
+      tags:
+        - createMyAsset
+      description: Create asset on the blockchain ledger
+      parameters:
+        - name: assetId
+          in: path
+          schema:
+            type: string
+          description: Asset ID
+          required: true
+      requestBody:
+        description: Create asset form
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssetForm'
+      responses:
+        200:
+          description: Asset creation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+    put:
+      operationId: putMyAsset
+      tags:
+        - putMyAsset
+      description: Update asset on the blockchain ledger
+      parameters:
+        - name: assetId
+          in: path
+          schema:
+            type: string
+          description: Asset ID
+          required: true
+      requestBody:
+        description: Update asset form
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssetForm'
+      responses:
+        200:
+          description: Asset update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+    delete:
+      operationId: deleteMyAsset
+      tags:
+        - deleteMyAsset
+      description: Delete asset from the blockchain ledger
+      parameters:
+        - name: assetId
+          in: path
+          schema:
+            type: string
+          description: Asset ID
+          required: true
+      responses:
+        200:
+          description: Asset deletion response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetDeletionResponse'
+          
+  '/myAssetExists/{assetId}':
+    get:
+      operationId: myAssetExists
+      tags:
+        - myAssetExists
+      description: Determine if asset exists on the blockchain ledger
+      parameters:
+        - name: assetId
+          in: path
+          schema:
+            type: string
+          description: Asset ID
+          required: true
+      responses:
+        200:
+          description: Asset exists response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetExistsResponse'
+  
+  /securedPing:
+    get:
+      operationId: securedPing
+      tags:
+        - securedPing
+      description: Ping blockchain network (authentication required)
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+      - BearerAuth: []
+      responses:
+        200:
+          description: Secured route response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecuredPingResponse'   
+  /data:
+    post:
+      operationId: postData
+      tags:
+        - Data
+      description: Post data to blockchain network
+      requestBody:
+        description: Add data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Data'
+      responses:
+        200:
+          description: Post data response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBody'
+
+components:
+  securitySchemes:
+      BearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT 
+  schemas:
+    ResponseBody:
+      properties:
+        success:
+          type: boolean
+        message: 
+          type: string
+          
+    HealthResponse:
+      allOf:  
+        - $ref: '#/components/schemas/ResponseBody'
+        - type: object
+          properties:
+            success:
+              type: boolean
+            message: 
+              type: string
+            status:
+              type: string
+              
+    SecuredPingResponse:
+      allOf:  
+        - $ref: '#/components/schemas/ResponseBody'
+        - type: object
+          properties:
+            status:
+              type: string
+
+    AssetResponse:
+      properties:
+        result:
+          type: object
+          properties:
+            value:
+              type: string
+        success:
+          type: boolean
+
+    AssetDeletionResponse:
+      properties:
+        result:
+          type: string
+        success:
+          type: boolean
+
+    AssetForm:
+      properties:
+        value:
+          type: string
+    
+    AssetExistsResponse:
+      properties:
+        result:
+          type: boolean
+        success:
+          type: boolean
+
+    Data:
+      properties:
+        id:
+          type: string
+        stringValue: 
+          type: string
+        numValue:
+          type: number
+        date:
+          type: string
+          format: date-time
+        email:
+          type: string
+          format: email

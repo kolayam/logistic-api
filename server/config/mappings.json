@@ -1,0 +1,14 @@
+{
+    "fabric-enroll-id": {
+        "searchPatterns": [
+            "env:FABRIC_ENROLL_ID",
+            "file:/server/config/fabric-credentials.json:$.enrollId"
+        ]
+    },
+    "fabric-enroll-secret": {
+        "searchPatterns": [
+            "env:FABRIC_ENROLL_SECRET",
+            "file:/server/config/fabric-credentials.json:$.enrollSecret"
+        ]
+    }
+}

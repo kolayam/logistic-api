@@ -1,0 +1,13 @@
+{
+    "logLevel": "OFF",
+    "host": "localhost",
+    "port": "3000",
+    "supportedWallets": ["FileSystemWallet", "CertificateManagerWallet"],
+    "activeWallet": "FileSystemWallet",
+    "fsWalletPath": "./test/mocks/WALLETS/wallet",
+    "orgName": "org1",
+    "appid": {
+      "oauthServerUrl": "<oauthServerUrl>"
+    }
+  }
+  
