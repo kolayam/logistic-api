@@ -32,24 +32,26 @@ const getSecured = async (req: express.Request, res: express.Response) => {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.defaultchannel.mycontract;
+    const contract: Contract = res.locals.mychannel['logistic-contract'];
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer
-    const invokeResponse = await contract.submitTransaction('ping');
+    // const invokeResponse = await contract.submitTransaction('ping');
+
+    const invokeResponse = await contract.evaluateTransaction('getOrder', 'some id');
 
     jsonRes = {
-      result: invokeResponse.toString(),
-      statusCode: 200,
-      success: true,
-    };
-  } catch (err) {
-    jsonRes = {
-      message: `${err.message}`,
-      statusCode: 500,
-      success: false,
-    };
-  }
+        result: invokeResponse.toString(),
+        statusCode: 200,
+        success: true,
+      };
+    } catch (err) {
+      jsonRes = {
+        message: `${err.message}`,
+        statusCode: 500,
+        success: false,
+      };
+    }
 
   logger.debug('exiting <<< getSecured()');
   util.sendResponse(res, jsonRes);
