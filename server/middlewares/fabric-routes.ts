@@ -84,12 +84,14 @@ export default class FabricRoutes {
       // If route is protected, add authentication middleware to each protected method
       if (route.protected && route.protected.enabled) {
         logger.debug(`${route.path} => add auth`);
-        passport.use(new APIStrategy({ oauthServerUrl: config.get('appid.oauthServerUrl') })); // to change passport strategy, modify this line
+        // passport.use(new APIStrategy({ oauthServerUrl: config.get('appid.oauthServerUrl') })); // to change passport strategy, modify this line
         // Add protected route
         // pass a 'allowedClients' array of clientIds read from config
-        this.router.use(route.path,
-          passport.authenticate(APIStrategy.STRATEGY_NAME, { session: false }),
-          auth.filter(route.protected.allowedClients));
+        // this.router.use(route.path,
+        //   passport.authenticate(APIStrategy.STRATEGY_NAME, { session: false }),
+        this.router.use(route.path,auth.filter(route.protected.allowedClients));
+          // auth.filter(route.protected.allowedClients);
+          // );
       }
 
       configPromises.push((async (): Promise<void> => {
