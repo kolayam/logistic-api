@@ -1,14 +1,14 @@
 {
   "serviceDiscovery": {
     "enabled": true,
-    "asLocalhost": false
+    "asLocalhost": true
   },
   "fabricConnections": {
     "conn1": [
       {
-        "channel": "defaultchannel",
+        "channel": "mychannel",
         "chaincodes": {
-          "mycontract": []
+          "logistic-contract": []
         }
       }
     ]
@@ -20,14 +20,28 @@
       "modulePath": "routes/ping"
     },
     {
-      "path": "/myAsset/:assetId",
+      "path": "/order/:orderId",
       "fabricConnection": "conn1",
-      "modulePath": "routes/myAsset"
+      "modulePath": "routes/order",
+      "protected": {
+        "enabled": true,
+        "allowedClients": [
+          "nimble_client",
+          "efact-test-client"
+        ]
+      }
     },
     {
-      "path": "/myAssetExists/:assetId",
+      "path": "/orderExists/:orderId",
       "fabricConnection": "conn1",
-      "modulePath": "routes/myAssetExists"
+      "modulePath": "routes/orderExists",
+      "protected": {
+        "enabled": true,
+        "allowedClients": [
+          "nimble_client",
+          "efact-test-client"
+        ]
+      }
     },
     {
       "path": "/securedPing",
@@ -36,14 +50,10 @@
       "protected": {
         "enabled": true,
         "allowedClients": [
-          "<clientId>"
+          "nimble_client",
+          "efact-test-client"
         ]
       }
-    },
-    {
-      "path": "/data",
-      "fabricConnection": "conn1",
-      "modulePath": "routes/data"
     }
   ]
 }
