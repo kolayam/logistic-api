@@ -38,14 +38,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseBody'
   
-  '/myAsset/{assetId}':
+  '/order/{orderId}':
     get:
-      operationId: getMyAsset
+      operationId: getOrder
       tags:
-        - getMyAsset
-      description: Get asset from blockchain
+        - getOrder
+      description: Get order from blockchain
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+      - BearerAuth: []
       parameters:
-        - name: assetId
+        - name: orderId
           in: path
           schema:
             type: string
@@ -111,33 +113,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssetResponse'
     delete:
-      operationId: deleteMyAsset
+      operationId: deleteOrder
       tags:
-        - deleteMyAsset
+        - deleteOrder
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+      - BearerAuth: []
       description: Delete asset from the blockchain ledger
       parameters:
-        - name: assetId
+        - name: orderId
           in: path
           schema:
             type: string
-          description: Asset ID
+          description: Order ID
           required: true
       responses:
         200:
-          description: Asset deletion response
+          description: Order deletion response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssetDeletionResponse'
+                $ref: '#/components/schemas/AssetResponse'
           
-  '/myAssetExists/{assetId}':
+  '/orderExists/{orderId}':
     get:
-      operationId: myAssetExists
+      operationId: orderExists
       tags:
-        - myAssetExists
+        - orderExists
       description: Determine if asset exists on the blockchain ledger
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+      - BearerAuth: []
       parameters:
-        - name: assetId
+        - name: orderId
           in: path
           schema:
             type: string
