@@ -9,7 +9,8 @@
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
         "inlineSources": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "rootDir": "server"
     },
     "exclude": [
         ".vscode",
