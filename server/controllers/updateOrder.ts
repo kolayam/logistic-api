@@ -18,29 +18,30 @@ import * as config from 'config';
 import * as express from 'express';
 import { Contract } from 'fabric-network';
 import { getLogger } from 'log4js';
+import { IOrderDetails } from '../dto/orderDetails';
 
 import * as util from '../helpers/util';
 
 const logger = getLogger('controllers - createMyAsset');
-logger.level = config.get('logLevel');
+logger.level = "DEBUG"
 
-const updateMyAsset = async (req: express.Request, res: express.Response) => {
-  logger.debug('entering >>> updateMyAsset()');
+const updateOrder = async (req: express.Request, res: express.Response) => {
+  logger.debug('entering >>> updateOrder()');
 
   let jsonRes;
   try {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.defaultchannel.mycontract;
+    const contract: Contract = res.locals.mychannel['logistic-contract'];
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer
-    const key = req.params.assetId;
-    const value = req.body.value;
+    const key = req.params.orderId;
+    const orderDetails: IOrderDetails = req.body.orderDetails;
+    const custodian: string = req.body.custodian;
     logger.debug('key: ' + key);
-    logger.debug('value: ' + value);
-    const invokeResponse = await contract.submitTransaction('updateMyAsset', key, value);
+    const invokeResponse = await contract.submitTransaction('changeTheCustodian', key,custodian, JSON.stringify(orderDetails));
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),
@@ -55,8 +56,8 @@ const updateMyAsset = async (req: express.Request, res: express.Response) => {
     };
   }
 
-  logger.debug('exiting <<< updateMyAsset()');
+  logger.debug('exiting <<< updateOrder()');
   util.sendResponse(res, jsonRes);
 };
 
-export { updateMyAsset as default };
+export { updateOrder as default };
