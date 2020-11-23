@@ -18,13 +18,17 @@ import * as config from 'config';
 import * as express from 'express';
 import { Contract } from 'fabric-network';
 import { getLogger } from 'log4js';
+import { Location } from '../dto/location';
+import { IOrderDetails } from '../dto/orderDetails';
+import { Item } from '../dto/item';
+import {LogisticProcess} from '../dto/logisticProcess';
 
 import * as util from '../helpers/util';
 
-const logger = getLogger('controllers - createMyAsset');
-logger.level = config.get('logLevel');
+const logger = getLogger('controllers - createOrder');
+logger.level = "DEBUG"
 
-const createMyAsset = async (req: express.Request, res: express.Response) => {
+const createOrder = async (req: express.Request, res: express.Response) => {
   logger.debug('entering >>> createMyAsset()');
 
   let jsonRes;
@@ -32,15 +36,31 @@ const createMyAsset = async (req: express.Request, res: express.Response) => {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.defaultchannel.mycontract;
+    const contract: Contract = res.locals.mychannel['logistic-contract'];
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer
-    const key = req.params.assetId;
-    const value = req.body.value;
-    logger.debug('key: ' + key);
-    logger.debug('value: ' + value);
-    const invokeResponse = await contract.submitTransaction('createMyAsset', key, value);
+    // const value = req.body.value;
+
+    const originLocation: Location = req.body.originLocation;
+    const orderDetails: IOrderDetails[] = req.body.orderDetails;
+    const epcList: string[] =req.body.epcList;
+    const itemIdentifier: Item = req.body.itemIdentifier;
+    const deliveryLocation: Location = req.body.deliveryLocation;
+    const note: string[] = req.body.note;
+    const custodian: string = req.body.custodian;
+
+    const logisticProcess = new LogisticProcess(
+        orderDetails,
+        epcList,
+        itemIdentifier,
+        deliveryLocation,
+        originLocation,
+        note,
+        custodian
+    );
+    
+    const invokeResponse = await contract.submitTransaction('startLogisticProcess', JSON.stringify(logisticProcess));
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),
@@ -55,8 +75,8 @@ const createMyAsset = async (req: express.Request, res: express.Response) => {
     };
   }
 
-  logger.debug('exiting <<< createMyAsset()');
+  logger.debug('exiting <<< createOrder()');
   util.sendResponse(res, jsonRes);
 };
 
-export { createMyAsset as default };
+export { createOrder as default };
