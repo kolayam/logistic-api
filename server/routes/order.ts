@@ -18,10 +18,10 @@ import * as config from 'config';
 import * as express from 'express';
 import { getLogger } from 'log4js';
 
-// import * as createMyAssetCtrl from '../controllers/createMyAsset';
+import * as createOrderCtrl from '../controllers/createOrder';
 import * as deleteOrderCtrl from '../controllers/deleteOrder';
 import * as getOrderCtrl from '../controllers/getOrder';
-// import * as updateMyAssetCtrl from '../controllers/updateMyAsset';
+import * as updateOrderCtrl from '../controllers/updateOrder';
 
 const router = express.Router({mergeParams: true});
 
@@ -36,9 +36,9 @@ logger.debug('setting up /order routes');
 /**
  * Add routes
  */
-// router.post('/', createMyAssetCtrl.default);
+router.post('/', createOrderCtrl.default);
 router.get('/', getOrderCtrl.default);
-// router.put('/', updateMyAssetCtrl.default);
+router.put('/', updateOrderCtrl.default);
 router.delete('/', deleteOrderCtrl.default);
 
 module.exports = router;
