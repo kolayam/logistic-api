@@ -8,7 +8,7 @@
   ],
   "activeWallet": "FileSystemWallet",
   "fsWalletPath": "./WALLETS/wallet",
-  "orgName": "Org1MSP",
+  "orgName": "nimble.efpf.com",
   "appid": {
     "oauthServerUrl": "<oauthServerUrl>"
   }
