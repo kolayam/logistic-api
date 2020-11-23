@@ -65,13 +65,8 @@ paths:
       tags:
         - createMyAsset
       description: Create asset on the blockchain ledger
-      parameters:
-        - name: assetId
-          in: path
-          schema:
-            type: string
-          description: Asset ID
-          required: true
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+      - BearerAuth: []
       requestBody:
         description: Create asset form
         required: true
@@ -91,15 +86,17 @@ paths:
       tags:
         - putMyAsset
       description: Update asset on the blockchain ledger
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+      - BearerAuth: []
       parameters:
-        - name: assetId
+        - name: orderId
           in: path
           schema:
             type: string
-          description: Asset ID
+          description: Order ID
           required: true
       requestBody:
-        description: Update asset form
+        description: Update order form
         required: true
         content:
           application/x-www-form-urlencoded:
@@ -107,7 +104,7 @@ paths:
               $ref: '#/components/schemas/AssetForm'
       responses:
         200:
-          description: Asset update response
+          description: Order update response
           content:
             application/json:
               schema:
