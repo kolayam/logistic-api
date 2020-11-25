@@ -18,7 +18,7 @@ import * as config from 'config';
 import * as express from 'express';
 import { getLogger } from 'log4js';
 
-import * as orderExistsCtrl from '../controllers/orderExists';
+import * as orderExistsCtrl from '../controllers/bp/orderExists';
 
 const router = express.Router({mergeParams: true});
 

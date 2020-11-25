@@ -19,25 +19,25 @@ import * as express from 'express';
 import { Contract } from 'fabric-network';
 import { getLogger } from 'log4js';
 
-import * as util from '../helpers/util';
+import * as util from '../../helpers/util';
 
-const logger = getLogger('controllers - orderExists');
+const logger = getLogger('controllers - getOrder');
 logger.level = config.get('logLevel');
 
-const orderExists = async (req: express.Request, res: express.Response) => {
-  logger.debug('entering >>> orderExists()');
+const getOrder = async (req: express.Request, res: express.Response) => {
+  logger.debug('entering >>> getOrder()');
 
   let jsonRes;
   try {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.mychannel['logistic-contract'];
+    const contract: Contract = res.locals.mychannel['logistic-contract']["org.nimble.supplychain_network.logistic"];
 
     // Query ledger
     const key = req.params.orderId;
     logger.debug('key: ' + key);
-    const invokeResponse = await contract.evaluateTransaction('orderExists', key);
+    const invokeResponse = await contract.evaluateTransaction('getOrder', key);
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),
@@ -52,8 +52,8 @@ const orderExists = async (req: express.Request, res: express.Response) => {
     };
   }
 
-  logger.debug('exiting <<< orderExists()');
+  logger.debug('exiting <<< getOrder()');
   util.sendResponse(res, jsonRes);
 };
 
-export { orderExists as default };
+export { getOrder as default };

@@ -19,7 +19,7 @@ import * as express from 'express';
 import { Contract } from 'fabric-network';
 import { getLogger } from 'log4js';
 
-import * as util from '../helpers/util';
+import * as util from '../../helpers/util';
 
 const logger = getLogger('controllers - deleteOrder');
 logger.level = "DEBUG"
@@ -32,7 +32,7 @@ const deleteOrder = async (req: express.Request, res: express.Response) => {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.mychannel['logistic-contract'];
+    const contract: Contract = res.locals.mychannel['logistic-contract']["org.nimble.supplychain_network.logistic"];
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer

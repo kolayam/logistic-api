@@ -18,10 +18,10 @@ import * as config from 'config';
 import * as express from 'express';
 import { getLogger } from 'log4js';
 
-import * as createOrderCtrl from '../controllers/createOrder';
-import * as deleteOrderCtrl from '../controllers/deleteOrder';
-import * as getOrderCtrl from '../controllers/getOrder';
-import * as updateOrderCtrl from '../controllers/updateOrder';
+import * as createOrderCtrl from '../controllers/bp/createOrder';
+import * as deleteOrderCtrl from '../controllers/bp/deleteOrder';
+import * as getOrderCtrl from '../controllers/bp/getOrder';
+import * as updateOrderCtrl from '../controllers/bp/updateOrder';
 
 const router = express.Router({mergeParams: true});
 

@@ -18,49 +18,30 @@ import * as config from 'config';
 import * as express from 'express';
 import { Contract } from 'fabric-network';
 import { getLogger } from 'log4js';
-import { Location } from '../dto/location';
-import { IOrderDetails } from '../dto/orderDetails';
-import { Item } from '../dto/item';
-import {LogisticProcess} from '../dto/logisticProcess';
+import { IOrderDetails } from '../../dto/orderDetails';
 
-import * as util from '../helpers/util';
+import * as util from '../../helpers/util';
 
-const logger = getLogger('controllers - createOrder');
+const logger = getLogger('controllers - createMyAsset');
 logger.level = "DEBUG"
 
-const createOrder = async (req: express.Request, res: express.Response) => {
-  logger.debug('entering >>> createMyAsset()');
+const updateOrder = async (req: express.Request, res: express.Response) => {
+  logger.debug('entering >>> updateOrder()');
 
   let jsonRes;
   try {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.mychannel['logistic-contract'];
+    const contract: Contract = res.locals.mychannel['logistic-contract']["org.nimble.supplychain_network.logistic"];
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer
-    // const value = req.body.value;
-
-    const originLocation: Location = req.body.originLocation;
-    const orderDetails: IOrderDetails[] = req.body.orderDetails;
-    const epcList: string[] =req.body.epcList;
-    const itemIdentifier: Item = req.body.itemIdentifier;
-    const deliveryLocation: Location = req.body.deliveryLocation;
-    const note: string[] = req.body.note;
+    const key = req.params.orderId;
+    const orderDetails: IOrderDetails = req.body.order_details;
     const custodian: string = req.body.custodian;
-
-    const logisticProcess = new LogisticProcess(
-        orderDetails,
-        epcList,
-        itemIdentifier,
-        deliveryLocation,
-        originLocation,
-        note,
-        custodian
-    );
-    
-    const invokeResponse = await contract.submitTransaction('startLogisticProcess', JSON.stringify(logisticProcess));
+    logger.debug('key: ' + key);
+    const invokeResponse = await contract.submitTransaction('changeTheCustodian', key,custodian, JSON.stringify(orderDetails));
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),
@@ -75,8 +56,8 @@ const createOrder = async (req: express.Request, res: express.Response) => {
     };
   }
 
-  logger.debug('exiting <<< createOrder()');
+  logger.debug('exiting <<< updateOrder()');
   util.sendResponse(res, jsonRes);
 };
 
-export { createOrder as default };
+export { updateOrder as default };
