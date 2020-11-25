@@ -35,7 +35,7 @@ const ping = async (req, res) => {
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer
-    const invokeResponse = await contract.evaluateTransaction('getOrder', 'some id');
+    const invokeResponse = await contract.evaluateTransaction('initIdentityLedger');
 
     // Query - simply query the ledger
     // const queryResponse = await contract.evaluateTransaction('ping');
