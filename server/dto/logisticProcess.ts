@@ -18,7 +18,7 @@ import { Location } from './location';
 
 export class LogisticProcess {
 
-    public orderDetails: IOrderDetails[];
+    public orderDetails: IOrderDetails;
 
     public epcList: string[];
 
@@ -31,15 +31,18 @@ export class LogisticProcess {
     public note: string[];
 
     public custodian: string;
+
+    public eventTime: number;
     
     constructor(
-        orderDetails: IOrderDetails[],
+        orderDetails: IOrderDetails,
         epcList: string[],
         itemIdentifier: Item,
         deliveryLocation: Location,
         originLocation: Location,
         note: string[],
-        custodian: string
+        custodian: string,
+        eventTime: number
      ) {
         this.orderDetails = orderDetails;
         this.epcList = epcList;
@@ -48,6 +51,7 @@ export class LogisticProcess {
         this.originLocation = originLocation;
         this.note = note;
         this.custodian = custodian;
+        this.eventTime = eventTime
     }
     
 }
