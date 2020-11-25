@@ -2,7 +2,13 @@ openapi: '3.0.0'
 
 info:
   version: "1.0.0"
-  title: REST API app
+  title: NIMBLE LOGISTIC PROCESS REST API
+  description: 'This is the Rest API for the Logistic Smart Contract in Nimble.'
+  contact:
+    email: akayeshmantha@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
   
 servers: 
   - url: http://localhost:3000
@@ -28,7 +34,7 @@ paths:
     get:
       operationId: ping
       tags:
-        - ping
+        - health
       description: Ping blockchain network
       responses:
         200:
@@ -42,7 +48,7 @@ paths:
     get:
       operationId: getOrder
       tags:
-        - getOrder
+        - order
       description: Get order from blockchain
       security: #this is not at root level in yaml because only this route is secured/needs auth token
       - BearerAuth: []
@@ -61,10 +67,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssetResponse'
     post:
-      operationId: createMyAsset
+      operationId: createOrder
       tags:
-        - createMyAsset
-      description: Create asset on the blockchain ledger
+        - order
+      description: Start Logistic Process on the blockchain ledger
       security: #this is not at root level in yaml because only this route is secured/needs auth token
       - BearerAuth: []
       requestBody:
@@ -76,16 +82,16 @@ paths:
               $ref: '#/components/schemas/AssetForm'
       responses:
         200:
-          description: Asset creation response
+          description: Logistic Initiate response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AssetResponse'
     put:
-      operationId: putMyAsset
+      operationId: updateOrder
       tags:
-        - putMyAsset
-      description: Update asset on the blockchain ledger
+        - order
+      description: Update the custodian of the Logistic Process on the blockchain ledger
       security: #this is not at root level in yaml because only this route is secured/needs auth token
       - BearerAuth: []
       parameters:
@@ -112,7 +118,7 @@ paths:
     delete:
       operationId: deleteOrder
       tags:
-        - deleteOrder
+        - order
       security: #this is not at root level in yaml because only this route is secured/needs auth token
       - BearerAuth: []
       description: Delete asset from the blockchain ledger
@@ -135,7 +141,7 @@ paths:
     get:
       operationId: orderExists
       tags:
-        - orderExists
+        - order
       description: Determine if asset exists on the blockchain ledger
       security: #this is not at root level in yaml because only this route is secured/needs auth token
       - BearerAuth: []
@@ -158,7 +164,7 @@ paths:
     get:
       operationId: securedPing
       tags:
-        - securedPing
+        - health
       description: Ping blockchain network (authentication required)
       security: #this is not at root level in yaml because only this route is secured/needs auth token
       - BearerAuth: []
@@ -168,28 +174,100 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SecuredPingResponse'   
-  /data:
-    post:
-      operationId: postData
+                $ref: '#/components/schemas/SecuredPingResponse'
+
+  '/identity/{userId}':
+    get:
+      operationId: getUser
       tags:
-        - Data
-      description: Post data to blockchain network
-      requestBody:
-        description: Add data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Data'
+        - identity
+      description: Get Identity from blockchain
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          description: User ID
+          required: true
       responses:
         200:
-          description: Post data response
+          description: User response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseBody'
-
+                $ref: '#/components/schemas/AssetResponse'
+    post:
+      operationId: createUser
+      tags:
+        - identity
+      description: Create Identity on the blockchain ledger
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+        - BearerAuth: []
+      requestBody:
+        description: Create Identity form
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssetForm'
+      responses:
+        200:
+          description: Asset creation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+    put:
+      operationId: updateUser
+      tags:
+        - identity
+      description: Update Identity on the blockchain ledger
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          description: User ID
+          required: true
+      requestBody:
+        description: Update Identity form
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssetForm'
+      responses:
+        200:
+          description: Identity update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+    delete:
+      operationId: deleteUser
+      tags:
+        - identity
+      security: #this is not at root level in yaml because only this route is secured/needs auth token
+        - BearerAuth: []
+      description: Delete Identity from the blockchain ledger
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          description: User ID
+          required: true
+      responses:
+        200:
+          description: User deletion response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
 components:
   securitySchemes:
       BearerAuth:
