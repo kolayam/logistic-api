@@ -29,5 +29,6 @@ RUN apt-get remove -y mysql-common \
 
 CMD ["npm", "start"]
 
-USER node
+USER root
+
 #EOF
