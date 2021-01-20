@@ -18,11 +18,6 @@ import * as config from 'config';
 import * as express from 'express';
 import { getLogger } from 'log4js';
 
-import * as createUserCtrl from '../controllers/identity/registerUser';
-import * as deleteUserCtrl from '../controllers/identity/deleteUser';
-import * as getUserCtrl from '../controllers/identity/getUser';
-import * as userCheckCtrl from '../controllers/identity/userExists';
-import * as updateUserCtrl from '../controllers/identity/updateUser';
 import * as retrieveUserCtrl from '../controllers/identity/retrieveUserByEmail';
 
 const router = express.Router({mergeParams: true});
@@ -30,19 +25,14 @@ const router = express.Router({mergeParams: true});
 /**
  * Set up logging
  */
-const logger = getLogger('routes - order');
+const logger = getLogger('routes - user');
 logger.level = config.get('logLevel');
 
-logger.debug('setting up /order routes');
+logger.debug('setting up /user routes');
 
 /**
  * Add routes
  */
-router.post('/', createUserCtrl.default);
-router.get('/', getUserCtrl.default);
-router.put('/', updateUserCtrl.default);
-router.delete('/', deleteUserCtrl.default);
-router.get('/checkUser', userCheckCtrl.default);
-router.get('/retrieveUser', retrieveUserCtrl.default);
+router.get('/', retrieveUserCtrl.default);
 
 module.exports = router;
