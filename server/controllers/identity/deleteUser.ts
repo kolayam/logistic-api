@@ -38,7 +38,7 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
     // Create transaction proposal for endorsement and sendTransaction to orderer
     const key = req.params.userId;
     logger.debug('key: ' + key);
-    const invokeResponse = await contract.submitTransaction('deleteUser', key);
+    const invokeResponse = await contract.submitTransaction('deleteIdentity', key);
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),
       statusCode: 200,

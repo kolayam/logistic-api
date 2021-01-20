@@ -37,7 +37,7 @@ const getUser = async (req: express.Request, res: express.Response) => {
     // Query ledger
     const key = req.params.userId;
     logger.debug('key: ' + key);
-    const invokeResponse = await contract.evaluateTransaction('getUser', key);
+    const invokeResponse = await contract.evaluateTransaction('getIdentity', key);
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),

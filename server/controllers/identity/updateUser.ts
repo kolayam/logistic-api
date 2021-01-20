@@ -40,7 +40,7 @@ const updateUser = async (req: express.Request, res: express.Response) => {
     const orgName: string = req.body.party_name;
     const orgId: string = req.body.party_hjid;
     logger.debug('key: ' + key);
-    const invokeResponse = await contract.submitTransaction('changeTheOrganizationofUser', key,orgId, orgName);
+    const invokeResponse = await contract.submitTransaction('changeTheOrganizationofIdentity', key,orgId, orgName);
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),

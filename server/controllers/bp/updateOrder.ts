@@ -41,7 +41,7 @@ const updateOrder = async (req: express.Request, res: express.Response) => {
     const orderDetails: IOrderDetails = req.body.order_details;
     const custodian: string = req.body.custodian;
     logger.debug('key: ' + key);
-    const invokeResponse = await contract.submitTransaction('changeTheCustodian', key,custodian, JSON.stringify(orderDetails));
+    const invokeResponse = await contract.submitTransaction('changeTheCustodian', key,custodian, JSON.stringify(orderDetails), res.locals.email);
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),

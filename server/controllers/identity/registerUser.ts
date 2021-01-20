@@ -43,7 +43,7 @@ const createUser = async (req: express.Request, res: express.Response) => {
         req.body.name, req.body.user_id , req.body.roles, req.body.party_hjid, req.body.party_name,
         req.body.email, req.body.peer_organization
     );
-    const invokeResponse = await contract.submitTransaction('createNewIdenity', JSON.stringify(user));
+    const invokeResponse = await contract.submitTransaction('createNewIdentity', JSON.stringify(user));
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),

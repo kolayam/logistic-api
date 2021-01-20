@@ -37,7 +37,7 @@ const orderExists = async (req: express.Request, res: express.Response) => {
     // Query ledger
     const key = req.params.orderId;
     logger.debug('key: ' + key);
-    const invokeResponse = await contract.evaluateTransaction('orderExists', key);
+    const invokeResponse = await contract.evaluateTransaction('orderExists', key, res.locals.email);
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),

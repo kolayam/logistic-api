@@ -62,7 +62,7 @@ const createOrder = async (req: express.Request, res: express.Response) => {
         eventTime
     );
     
-    const invokeResponse = await contract.submitTransaction('startLogisticProcess', JSON.stringify(logisticProcess));
+    const invokeResponse = await contract.submitTransaction('startLogisticProcess', JSON.stringify(logisticProcess), res.locals.email);
 
     jsonRes = {
       result: JSON.parse(invokeResponse.toString()),

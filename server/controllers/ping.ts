@@ -31,7 +31,7 @@ const ping = async (req, res) => {
     // More info on the following calls: https://fabric-sdk-node.github.io/Contract.html
 
     // Get contract instance retrieved in fabric-routes middleware
-    const contract: Contract = res.locals.mychannel['logistic-contract'];
+    const contract: Contract = res.locals.mychannel['logistic-contract']['org.nimble.supplychain_network.identity'];
 
     // Invoke transaction
     // Create transaction proposal for endorsement and sendTransaction to orderer
