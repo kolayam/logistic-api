@@ -70,6 +70,12 @@ export const filter = whitelist => (req, res, next) => {
   const accessTokenString = getAccessToken(req, next);
   const accessTokenPayload = jwt.decode(accessTokenString);
 
+  res.locals.email = accessTokenPayload['email'];
+
+  if(res.locals.email == null || res.locals.email == undefined) {
+    res.json({ error: 'invalid_token', message: 'This token does not have the appropriate access rights (email)' });
+  }
+
   const audience = getAudience(accessTokenPayload);
 
   if (whitelist.includes(audience)) {
